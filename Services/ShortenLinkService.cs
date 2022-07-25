@@ -23,6 +23,8 @@ public class ShortenLinkService
             Owner = user
         };
         shortLink.Code = Guid.NewGuid().ToString()[0..4];
+        shortLink.CreateAt = DateTime.Now;
+        shortLink.FullShortedLink = "";
         _context.ShortLinks.Add(shortLink);
         await _context.SaveChangesAsync();
         return data;
@@ -40,6 +42,7 @@ public class ShortenLinkService
     public async Task<ShortLink> DeleteAsync(string code)
     {
         var shortLink = await _context.ShortLinks.Where(s => s.Code == code).FirstOrDefaultAsync();
+
         _context.ShortLinks.Remove(shortLink);
         await _context.SaveChangesAsync();
         return shortLink;
