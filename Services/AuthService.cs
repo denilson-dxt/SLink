@@ -24,7 +24,7 @@ public class AuthService
         var user = await ValidateUser(credentials);
         if (user == null) return new { Status = "ERORR", Error = "Wrong password or Ivalid User" };
         var token = GenerateToken(user);
-        return new { Status = "OK", User = new UserDto { Username = user.UserName, Email = user.Email, EmailConfirmed = user.EmailConfirmed }, Token = token };
+        return new { Status = "OK", User = new UserDto {Id = user.Id, Username = user.UserName, Email = user.Email, EmailConfirmed = user.EmailConfirmed }, Token = token };
     }
 
     private async Task<ApplicationUser> ValidateUser(LoginDto credentials)

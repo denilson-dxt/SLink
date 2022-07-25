@@ -6,6 +6,8 @@ using SLink.Dtos;
 using SLink.Data;
 using SLink.Services;
 
+namespace SLink.Controllers;
+
 [ApiController]
 [Route("api/auth")]
 public class AuthenticationController : ControllerBase
@@ -41,6 +43,7 @@ public class AuthenticationController : ControllerBase
             Status = "OK",
             User = new UserDto
             {
+                Id = user.Id,
                 Username = user.UserName,
                 Email = user.Email,
                 EmailConfirmed = user.EmailConfirmed
@@ -63,7 +66,7 @@ public class AuthenticationController : ControllerBase
     {
         var user = await _userManager.FindByNameAsync(User.Identity.Name);
         
-        return Ok(new {Status = "OK", User = new UserDto {Username = user.UserName, Email = user.Email, EmailConfirmed = user.EmailConfirmed} });
+        return Ok(new {Status = "OK", User = new UserDto {Id = user.Id, Username = user.UserName, Email = user.Email, EmailConfirmed = user.EmailConfirmed} });
     }
 
 }

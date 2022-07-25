@@ -62,6 +62,7 @@ builder.Services.AddAuthentication(options =>
 
 
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ShortenLinkService>();
 
 var app = builder.Build();
 
