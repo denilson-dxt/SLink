@@ -7,7 +7,7 @@ using System.Text;
 
 using SLink.Data;
 using SLink.Configuration;
-
+using SLink.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +61,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 
+builder.Services.AddScoped<AuthService>();
 
 var app = builder.Build();
 
@@ -73,8 +74,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -5,3 +5,5 @@ obj/
 
 appsettings.json
 app.db
+app.db-wal
+app.db-wal
