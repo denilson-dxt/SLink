@@ -41,17 +41,35 @@ public class ShortenLinkController : ControllerBase
     [AllowAnonymous]
     [HttpGet]
     [Route("get")]
-    public async Task<ActionResult> GetShortLink(string code)
+    public async Task<ActionResult> GetShortLink(string code, string? key = "")
     {
-        var result = await _shortenLinkService.GetByCode(code);
-        return Ok(result);   
+        System.Console.WriteLine(User.Identity.IsAuthenticated);
+        ApplicationUser user = null;
+        if (User.Identity.IsAuthenticated)
+            user = await _userManager.FindByNameAsync(User.Identity.Name);
+        var result = await _shortenLinkService.GetByCode(code, key, user);
+        if (result == null)
+            return BadRequest(new { Status = "Error", Message = "Invalid link or invalid key provided" });
+        return Ok(result);
+    }
+
+
+    [Authorize]
+    [HttpPut]
+    [Route("update")]
+    public async Task<ActionResult> UpdateShortLink(ShortLinkDto data)
+    {
+        var result = await _shortenLinkService.UpdateAsync(data);
+        if (result == null) return BadRequest(new { Status = "ERROR", Message = "No shortLink found" });
+        return Ok(result);
     }
 
     [HttpDelete]
     [Route("delete")]
     public async Task<ActionResult> DeleteShortLink(string code)
     {
-        var result = await _shortenLinkService.DeleteAsync(code);
+        ApplicationUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+        var result = await _shortenLinkService.DeleteAsync(code, user);
         return Ok(result);
     }
 }
