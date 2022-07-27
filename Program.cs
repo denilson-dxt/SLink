@@ -61,6 +61,8 @@ builder.Services.AddAuthentication(options =>
 });
 
 
+builder.Services.AddCors();
+
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ShortenLinkService>();
 
@@ -72,6 +74,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(options => 
+{
+    options.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader();
+});
 
 app.UseHttpsRedirection();
 

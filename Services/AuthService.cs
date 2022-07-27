@@ -22,7 +22,7 @@ public class AuthService
     public async Task<object> AuthenticateAsync(LoginDto credentials)
     {
         var user = await ValidateUser(credentials);
-        if (user == null) return new { Status = "ERORR", Error = "Wrong password or Ivalid User" };
+        if (user == null) return new { Status = "ERROR", Error = "Wrong password or Ivalid User" };
         var token = GenerateToken(user);
         return new { Status = "OK", User = new UserDto {Id = user.Id, Username = user.UserName, Email = user.Email, EmailConfirmed = user.EmailConfirmed }, Token = token };
     }
