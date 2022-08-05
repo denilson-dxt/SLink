@@ -39,13 +39,15 @@ public class ShortenLinkService
         var links = await _context.ShortLinks.Where(s => s.Owner.Id == user.Id).ToListAsync();
         return links;
     }
-    public async Task<ShortLink?> GetByCode(string code, string key, ApplicationUser user)
+    public async Task<ShortLink?> GetByCode(string code, string key, ApplicationUser user, bool requireOwner=false)
     {
         var shortLink = await _context.ShortLinks.Where(s => s.Code == code).FirstOrDefaultAsync();
 
+        if(shortLink == null) return null;
+
         // Validate key checking the key and the owner
         bool valid = false;
-        if (user == null && shortLink.Key == key)
+        if (user == null && shortLink.Key == key && !requireOwner)
             valid = true;
         if (user != null && shortLink.Owner.Id == user.Id)
             valid = true;

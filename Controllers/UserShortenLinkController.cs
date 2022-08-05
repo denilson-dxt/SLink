@@ -10,11 +10,11 @@ namespace SLink.Controllers;
 [ApiController]
 [Authorize]
 [Route("api/shorten-link")]
-public class ShortenLinkController : ControllerBase
+public class UserShortenLinkController : ControllerBase
 {
     private readonly ShortenLinkService _shortenLinkService;
     private readonly UserManager<ApplicationUser> _userManager;
-    public ShortenLinkController(ShortenLinkService shortenLinkService, UserManager<ApplicationUser> userManager)
+    public UserShortenLinkController(ShortenLinkService shortenLinkService, UserManager<ApplicationUser> userManager)
     {
         _shortenLinkService = shortenLinkService;
         _userManager = userManager;
@@ -38,7 +38,6 @@ public class ShortenLinkController : ControllerBase
         return Ok(links);
     }
 
-    [AllowAnonymous]
     [HttpGet]
     [Route("get")]
     public async Task<ActionResult> GetShortLink(string code, string? key = "")
@@ -47,7 +46,7 @@ public class ShortenLinkController : ControllerBase
         ApplicationUser user = null;
         if (User.Identity.IsAuthenticated)
             user = await _userManager.FindByNameAsync(User.Identity.Name);
-        var result = await _shortenLinkService.GetByCode(code, key, user);
+        var result = await _shortenLinkService.GetByCode(code, key, user, true);
         if (result == null)
             return BadRequest(new { Status = "Error", Message = "Invalid link or invalid key provided" });
         return Ok(result);
