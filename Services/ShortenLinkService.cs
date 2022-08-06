@@ -39,11 +39,11 @@ public class ShortenLinkService
         var links = await _context.ShortLinks.Where(s => s.Owner.Id == user.Id).ToListAsync();
         return links;
     }
-    public async Task<ShortLink?> GetByCode(string code, string key, ApplicationUser user, bool requireOwner=false)
+    public async Task<object?> GetByCode(string code, string key, ApplicationUser user, bool requireOwner=false)
     {
         var shortLink = await _context.ShortLinks.Where(s => s.Code == code).FirstOrDefaultAsync();
 
-        if(shortLink == null) return null;
+        if(shortLink == null) return new { Status = "Error", Errors = new string[]{"No link found" }};
 
         // Validate key checking the key and the owner
         bool valid = false;
@@ -52,7 +52,7 @@ public class ShortenLinkService
         if (user != null && shortLink.Owner.Id == user.Id)
             valid = true;
 
-        return valid ? shortLink : null;
+        return valid ? new {Status ="Ok", ShortLink = shortLink} : null;
 
     }
 
