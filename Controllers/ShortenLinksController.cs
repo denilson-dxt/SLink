@@ -21,13 +21,14 @@ public class ShortenLinksController : ControllerBase
 
     [HttpGet]
     [Route("get-link")]
-    public async Task<ActionResult> GetLinkByCode(string code, string? key = "")
+    public async Task<ActionResult> GetLinkByCode(string code, string? key)
     {
         System.Console.WriteLine(User.Identity.IsAuthenticated);
         ApplicationUser user = null;
         if (User.Identity.IsAuthenticated)
             user = await _userManager.FindByNameAsync(User.Identity.Name);
         var result = await _shortenLinkService.GetByCode(code, key, user);
+        System.Console.WriteLine(result);
         if (result == null)
             return BadRequest(new { Status = "Error", Message = "Invalid link or invalid key provided" });
         return Ok(result);
